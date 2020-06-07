@@ -47,9 +47,9 @@ def create_app(config_name):
 		app.logger.addHandler(file_handler)
 		app.logger.setLevel(logging.INFO)
 		app.logger.info('Movie startup')
-#READDD!!!
-		'''from .request import configure_request
+
+		from .request import configure_request
 		configure_request(app)
-		mail.init_app(app)'''
+		mail.init_app(app)
 
 	from app import routes, models, error
