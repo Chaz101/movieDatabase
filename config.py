@@ -12,3 +12,5 @@ class Config(object):
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 	ADMINS = ['charlieconnor03@gmail.com']
+	MOVIE_API_BASE_URL ='https://api.themoviedb.org/3/movie/{}?api_key={}'
+	MOVIE_API_KEY = '859a79070480e0565c9326e50b3ec49e'

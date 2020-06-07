@@ -52,4 +52,4 @@ def create_app(config_name):
 		configure_request(app)
 		mail.init_app(app)'''
 
-	from app import routes, models, errors
+	from app import routes, models, error
