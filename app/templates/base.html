@@ -1,10 +1,11 @@
-{% extends 'bootstrap/base.html'%}
+<!-- this html will be used on every page -->
+{% extends 'bootstrap/base.html'%} <!-- uses bootstrap -->
 
 {% block title %}
-	{% if title %}{{ title }} - Watchlist{% else %}{{ 'Welcome to Watchlist' }}{% endif %}
+	{% if title %}{{ title }} - Watchlist{% else %}{{ 'Welcome to Watchlist' }}{% endif %} <!-- sets title -->
 {% endblock %}
 
-{% block navbar %}
+{% block navbar %} <!-- makes navbar -->
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
@@ -14,18 +15,18 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="{{ url_for('index') }}">Watchlist</a>
+				<a class="navbar-brand" href="{{ url_for('index') }}">Watchlist</a> <!-- Navbar entry 1 links to index -->
 			</div>
 			<div class="collape navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="{{ url_for('index') }}">{{ 'Home' }}</a></li>
+					<li><a href="{{ url_for('index') }}">{{ 'Home' }}</a></li> <!-- entry 2 links to index -->
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					{% if current_user.is_anonymous %}
-					<li><a href="{{ url_for('login') }}">{{ 'Login' }}</a></li>
+					<li><a href="{{ url_for('login') }}">{{ 'Login' }}</a></li> <!-- entry 3 links to login, if user is logged out -->
 					{% else %}
-					<li><a href="{{ url_for('user', username=current_user.username) }}">{{ 'Profile' }}</a></li>
-					<li><a href="{{ url_for('logout') }}">{{ 'Logout' }}</a></li>
+					<li><a href="{{ url_for('user', username=current_user.username) }}">{{ 'Profile' }}</a></li> <!-- entry 4 links to profile, if user is logged in -->
+					<li><a href="{{ url_for('logout') }}">{{ 'Logout' }}</a></li> <!-- entry 5 links to logout if user is logged in -->
 					{% endif %}
 				</ul>
 			</div>
@@ -38,7 +39,7 @@
 		{% with messages = get_flashed_messages() %}
 		{% if messages %}
 			{% for messages in messages %}
-			<div class="alert alert-info" role="alert">{{ message }}</div>
+			<div class="alert alert-info" role="alert">{{ message }}</div> <!-- shows how flash messages display (alert popup) -->
 			{% endfor %}
 		{% endif %}
 		{% endwith %}

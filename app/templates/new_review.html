@@ -1,17 +1,17 @@
 {% extends 'base.html'%}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/wtf.html" as wtf %} <!--Uses bootstrap for forms (wtf) -->
 
 {% block content %}
     <div class="container">
 
         <div class="col-md-8">
 
-            <img src="{{movie.poster}}" alt="{{movie.title}}" class="img-responsive">
+            <img src="{{movie.poster}}" alt="{{movie.title}}" class="img-responsive"> <!-- shows movie poster-->
         </div>
 
         <div class="col-md-4">
 
-            {{ wtf.quick_form(review_form) }}
+            {{ wtf.quick_form(review_form) }} <!-- uses form to fill rest of page -->
         </div>
 
     </div>

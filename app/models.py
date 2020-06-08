@@ -11,15 +11,15 @@ def load_user(user_id):
 	return User.query.get(int(user_id))
 
 class User(UserMixin,db.Model):
-	__tablename__ = 'users'
+	__tablename__ = 'users' 
+	#creates database with all users
 
 	id = db.Column(db.Integer,primary_key = True)
-	username = db.Column(db.String(255),index = True)
-	email = db.Column(db.String(255),unique = True,index = True)
-	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
-	bio = db.Column(db.String(255))
-	profile_pic_path = db.Column(db.String())
-	password_hash = db.Column(db.String(255))
+	username = db.Column(db.String(255),index = True) #username can have max char count of 255
+	email = db.Column(db.String(255),unique = True,index = True) #emails must be unique (cant have more than one account)
+	bio = db.Column(db.String(550)) #shows the about me section of each user, max 550 char
+	#profile_pic_path = db.Column(db.String()) 
+	password_hash = db.Column(db.String(255)) #hashed password can be max of 255 char
 	reviews = db.relationship('Review',backref = 'author',lazy = "dynamic")
 
 	def __repr__(self):
@@ -33,15 +33,15 @@ class User(UserMixin,db.Model):
 
 	def avatar(self, size):
 		digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-		return 'https://www.gravatar.com/avatar/{}?d=identicon&s{}'.format(digest, size)
+		return 'https://www.gravatar.com/avatar/{}?d=identicon&s{}'.format(digest, size) #all avatars are from this website
 
-	def get_reset_password_token(self, expires_in=600):
+	def get_reset_password_token(self, expires_in=600): #Reset pw token lasts 600 seconds from send time
 		return jwt.encode(
 			{'reset_password': self.id, 'exp': time() + expires_in},
 			app.config['SECRET_KEY'], algorithms='HS256').decode('utf-8')
 
 	@staticmethod
-	def verify_reset_password_token(token):
+	def verify_reset_password_token(token): #confirms password token used for acount is the correct one that was sent
 		try:
 			id = jwt.decode(token, app.config['SECRET_KEY'],
 							algorithms=['HS256'])['reset_password']
@@ -53,23 +53,15 @@ class User(UserMixin,db.Model):
 def load_user(id):
 	return User.query.get(int(id))
 
-class Role(db.Model):
-	__tablename__ = 'roles'
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(255))
-	users = db.relationship('User', backref='role', lazy='dynamic')
-
-	def __repr__(self):
-		return f'User {self.name}'
 
 class Movie:
 	def __init__(self, id, title, overview, poster, vote_average, vote_count):
 		self.id = id
 		self.title = title
 		self.overview = overview
-		self.poster = "https://image.tmdb.org/t/p/w500/" + poster
-		self.vote_average = vote_average
-		self.vote_count = vote_count
+		self.poster = "https://image.tmdb.org/t/p/w500/" + poster #Where movie poster comes from
+		self.vote_average = vote_average #all from tmdb
+		self.vote_count = vote_count #all from tmdb
 
 
 class Review(db.Model):
@@ -81,7 +73,7 @@ class Review(db.Model):
 	movie_title = db.Column(db.String)
 	image_path = db.Column(db.String)
 	movie_review = db.Column(db.String)
-	posted = db.Column(db.DateTime,default=datetime.utcnow)
+	posted = db.Column(db.DateTime,default=datetime.utcnow) #reviews show posted in UTC time
 	user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
 
 	def save_review(self):
@@ -93,7 +85,7 @@ class Review(db.Model):
 		reviews = Review.query.filter_by(movie_id=id).all()
 		return reviews
 
-	def review_results(review_list):
+	def review_results(review_list): #list of all reviews on a movie
 		review_results = []
 		for review_item in review_list:
 			title = review_item.get('title')

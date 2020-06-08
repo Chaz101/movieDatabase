@@ -3,10 +3,10 @@
 
   <div class="row">
 
-    <h3> Found {{ movies| count }} matches </h3>
+    <h3> Found {{ movies| count }} matches </h3> <!-- When searching, displays # of matches -->
     <hr>
     <ul>
-      {{ macro.displayMovieList(movies)}}
+      {{ macro.displayMovieList(movies)}} <!-- displays matches -->
     </ul>
 
   </div>

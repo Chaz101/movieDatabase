@@ -16,6 +16,7 @@ def before_request():
 		current_user.last_seen = datetime.utcnow()
 		db.session.commit()
 
+#what gets sent to the index/home page
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -30,7 +31,7 @@ def index():
 	else:
 		return render_template('index.html', title=title, popular=popular_movies, upcoming=upcoming_movie, now_playing=now_showing_movie)
 
-
+#how to search for movies
 @app.route('/search/<movie_name>')
 def search(movie_name):
 	movie_name_list = movie_name.split(" ")
@@ -39,7 +40,7 @@ def search(movie_name):
 	title = f'search results for {movie_name}'
 	return render_template('search.html', movies=searched_movies)
 
-
+#writing a new movie review
 @app.route('/movie/review/new/<int:id>', methods=['GET', 'POST'])
 @login_required
 def new_review(id):
@@ -55,7 +56,7 @@ def new_review(id):
 	title = f'{movie.title} review'
 	return render_template('new_review.html', title=title, review_form=form, movie=movie)
 
-
+#on each movie page
 @app.route('/movie/<int:id>')
 def movie(id):
     movie = get_movie(id)
@@ -64,7 +65,7 @@ def movie(id):
 
     return render_template('movie.html', title=title, movie=movie, reviews=reviews)
 
-
+#user profile pages
 @app.route('/user/<username>')
 @login_required
 def user(username):
@@ -73,7 +74,7 @@ def user(username):
 		abort(404)
 	return render_template('user.html', user=user)
 
-
+#edit own profile
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -89,7 +90,7 @@ def edit_profile():
 		form.bio.data = current_user.bio
 	return render_template('edit_profile.html', title='Edit Profile', form=form)
 
-
+#login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
@@ -107,7 +108,7 @@ def login():
 		return redirect(next_page)
 	return render_template('login.html', title='Sign In', form=form)
 
-
+#logout, redirects to index
 @app.route('/logout')
 @login_required
 def logout():
@@ -115,7 +116,7 @@ def logout():
     flash('You have been successfully logged out.')
     return redirect(url_for("index"))
 
-
+#register, redirects to login after rego
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
@@ -130,7 +131,7 @@ def register():
 		return redirect(url_for('login'))
 	return render_template('register.html', title='Register', form=form)
 
-
+#reset pw, will send an email to user with limited token
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
 	if current_user.is_authenticated:
@@ -144,7 +145,7 @@ def reset_password_request():
 			return redirect(url_for('login'))
 		return render_template('reset_password_request.html', title='Reset Password', form=form)
 
-
+#resets password after email is sent, token from previous block is used
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
 	if current_user.is_authenticated:

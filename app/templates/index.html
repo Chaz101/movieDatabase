@@ -4,13 +4,13 @@
 <!-- Styles block -->
 
 {% block styles%} {{ super() }}
-<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"> {% endblock %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"> {% endblock %} <!-- index.css -->
 <!-- Content block -->
 {% block content %}
 
 <div class="container">
   <form>
-    <input type="text" name="movie_query" placeholder="Search for a Movie" class="form-control">
+    <input type="text" name="movie_query" placeholder="Search for a Movie" class="form-control"> <!-- search bar -->
     <input type="submit" value="Submit" class="btn btn-default">
   </form>
 
