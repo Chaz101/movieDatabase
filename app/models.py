@@ -10,15 +10,17 @@ import jwt
 def load_user(user_id):
 	return User.query.get(int(user_id))
 
-class User(UserMixin, db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(64), index=True, unique=True)
-	email = db.Column(db.String(120), index=True, unique=True)
-	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-	password_hash = db.Column(db.String(128))
+class User(UserMixin,db.Model):
+	__tablename__ = 'users'
+
+	id = db.Column(db.Integer,primary_key = True)
+	username = db.Column(db.String(255),index = True)
+	email = db.Column(db.String(255),unique = True,index = True)
+	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
 	bio = db.Column(db.String(255))
 	profile_pic_path = db.Column(db.String())
-	reviews = db.relationship('Review', backref='user', lazy='dynamic')
+	password_hash = db.Column(db.String(255))
+	reviews = db.relationship('Review',backref = 'author',lazy = "dynamic")
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -52,6 +54,7 @@ def load_user(id):
 	return User.query.get(int(id))
 
 class Role(db.Model):
+	__tablename__ = 'roles'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(255))
 	users = db.relationship('User', backref='role', lazy='dynamic')
@@ -68,14 +71,18 @@ class Movie:
 		self.vote_average = vote_average
 		self.vote_count = vote_count
 
+
 class Review(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+
+	__tablename__ = 'reviews'
+
+	id = db.Column(db.Integer,primary_key = True)
 	movie_id = db.Column(db.Integer)
 	movie_title = db.Column(db.String)
 	image_path = db.Column(db.String)
 	movie_review = db.Column(db.String)
-	posted = db.Column(db.DateTime, default=datetime.utcnow)
-	user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+	posted = db.Column(db.DateTime,default=datetime.utcnow)
+	user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
 
 	def save_review(self):
 		db.session.add(self)
@@ -85,3 +92,10 @@ class Review(db.Model):
 	def get_reviews(cls,id):
 		reviews = Review.query.filter_by(movie_id=id).all()
 		return reviews
+
+	def review_results(review_list):
+		review_results = []
+		for review_item in review_list:
+			title = review_item.get('title')
+			review = review_item.get('review')
+		return review_results
